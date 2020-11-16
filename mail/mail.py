@@ -1,32 +1,42 @@
 from .mail_exception import MailException
 
 class Mail():
-    def __init__(mail, json_data ):
-        mail.mail_id = json_data["id"]
-        mail.sender = json_data["from"]
-        mail.receiver = json_data["to"]
-        mail.date = json_data["date"]
-        mail.subject = json_data["subject"]
-        mail.set_mail_data_from_json(json_data)
+    def __init__(mail, mail_id = -1):
+        mail.mail_id = mail_id
+        mail.sender = None
+        mail.receiver = None
+        mail.date = None
+        mail.subject = None
+        mail.msg = None
+        mail.have_files = False
+        mail.files = []
+
+
+
+
 
 
     def set_mail_data_from_json(mail, json_data):
         if json_data["id"] != mail.mail_id:
             raise MailException("msg id is diffrent from object mail", MailException.WRONG_MAIL_ID)
 
-            mail.msg = json_data["textBody"]
-            try:
-                mail.files = [file["filename"] for file in json_data["attachments"]]
-                mail.have_files = len(mail.file) > 0
-            except:
-                mail.have_files = False
+        mail.sender = json_data.get("from")
+        mail.receiver = json_data.get("to")
+        mail.date = json_data.get("date")
+        mail.subject = json_data.get("subject")
+        mail.msg = json_data.get("textBody")
+
+        try:
+            mail.files = [file["filename"] for file in json_data.get("attachments")]
+            mail.have_files = len(mail.file) > 0
+        except:
+            mail.have_files = False
 
 
 
 
 
-    #maybe have to transfer to model ?????????? @TODO
-    def send_mail(mail):
-        pass
+
+
 
 

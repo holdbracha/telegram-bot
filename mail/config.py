@@ -1,6 +1,23 @@
 
-TEMP_MAIL_URL_GET_ADDRESSES = "https://www.1secmail.com/api/v1/?action=genRandomMailbox&count={}" #  param= num of mail adresses will get
+SEND_MAIL_API_KEY = "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"
 
-TEMP_MAIL_URL_GET_MAILS_LIST = "https://www.1secmail.com/api/v1/?action=getMessages&login={}&domain={}" #params: username and domail name of mail address
+import os
+import sendgrid
+from sendgrid.helpers.mail import Content, Email, Mail, To
 
-TEMP_MAIL_URL_GET_MAIL_DATA = "https://www.1secmail.com/api/v1/?action=readMessage&login={}&domain={}&id={}" #params: username and domail name of mail address and mail id
+sg = sendgrid.SendGridAPIClient(
+    api_key=SEND_MAIL_API_KEY#os.environ.get("SENDGRID_API_KEY")
+)
+from_email = Email("my@gmail.com")
+to_email = To("sm5800810@gmail.com")
+subject = "A test email from Sendgrid"
+content = Content(
+    "text/plain", "Here's a test email sent through Python"
+)
+mail = Mail(from_email, to_email, subject, content)
+response = sg.send(mail)
+
+# The statements below can be included for debugging purposes
+print(response.status_code)
+print(response.body)
+print(response.headers)
