@@ -3,6 +3,7 @@ import requests
 from config import *
 from message import *
 from action import get_action
+from mail import *
 
 app = Flask(__name__, static_url_path='', static_folder='dist')
 req_action = None
@@ -22,7 +23,18 @@ def send_messages_to_user(chat_id):
         requests.get(TELEGRAM_RES.format(TOKEN, chat_id, message))
     return Response("success")
 
-if __name__ == '__main__':
+@app.route('/check_new_mails')
+def check_new_mails(): #will calles every minute by cron job
+    addresses = get_all_mail_address()
+    for addr in addresses:
+        chat_id, num_of_new_mails = get_mail_list_from_mail_addr(addr["address"])
+        if num_of_new_mails > 0:
+            res_messages = get_action('send_emails_to_user', chat_id)
+            for message in res_messages:
+                    requests.get(TELEGRAM_RES.format(TOKEN, chat_id, message))
+    return Response("success")
 
+
+if __name__ == '__main__':
     requests.get(TELEGRAM_INIT_WEBHOOK_URL)
     app.run(port=3000, threaded = True, debug=True)
