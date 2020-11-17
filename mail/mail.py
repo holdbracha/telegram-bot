@@ -1,41 +1,50 @@
 from .mail_exception import MailException
 
 class Mail():
-    def __init__(mail, mail_id = -1):
-        mail.mail_id = mail_id
-        mail.sender = None
-        mail.receiver = None
-        mail.date = None
-        mail.subject = None
-        mail.msg = None
-        mail.have_files = False
-        mail.files = []
+    def __init__(self, mail_id = -1):
+        self.mail_id = mail_id
+        self.sender = None
+        self.receiver = None
+        self.date = None
+        self.subject = None
+        self.msg = None
+        self.have_files = False
+        self.files = []
 
 
 
 
 
-
-    def set_mail_data_from_json(mail, json_data):
-        if json_data["id"] != mail.mail_id:
+    def set_mail_data_from_json(self, json_data):
+        if json_data["id"] != self.mail_id:
             raise MailException("msg id is diffrent from object mail", MailException.WRONG_MAIL_ID)
 
-        mail.sender = json_data.get("from")
-        mail.receiver = json_data.get("to")
-        mail.date = json_data.get("date")
-        mail.subject = json_data.get("subject")
-        mail.msg = json_data.get("textBody")
+        self.sender = json_data.get("from")
+        self.receiver = json_data.get("to")
+        self.date = json_data.get("date")
+        self.subject = json_data.get("subject")
+        self.msg = json_data.get("textBody")
 
         try:
-            mail.files = [file["filename"] for file in json_data.get("attachments")]
-            mail.have_files = len(mail.file) > 0
+            self.files = [file["filename"] for file in json_data.get("attachments")]
+            self.have_files = len(self.file) > 0
         except:
-            mail.have_files = False
+            self.have_files = False
 
 
 
 
 
+
+mail = Mail()
+print(mail.__dict__)
+
+action = {
+    "action": "send",
+    "subject": "kush",
+    "add files":"yes",
+    "last":"subject"
+}
 
 
 
