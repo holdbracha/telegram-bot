@@ -1,5 +1,5 @@
 from mail import *
-import db_utils
+from db_pkg import *
 import datetime
 
 #send_actions = ['get_receiver', 'get_subject', 'get_msg', 'is_include_files', 'get_file']
@@ -11,54 +11,54 @@ import datetime
 
 def create_temp_mail(chat_id):
     mail_address = get_new_mail_addr(chat_id)
-    db_utils.add_mail_address(mail_address, chat_id)
+    add_mail_address(mail_address, chat_id)
     return mail_address
 
 
 def start_sending_proccess(chat_id):
     mail = Mail(chat_id)
-    db_utils.save_sending_mail(chat_id, mail, 'get_receiver')
+    save_sending_mail(Sending(chat_id, mail, 'get_receiver'))
     return 'Who is the recipient?'
 
 
 def get_receiver(params):
     params[1].update_mail('receiver', params[2])
-    db_utils.save_sending_mail(params[0], params[1], 'get_subject')
+    save_sending_mail(Sending(params[0], params[1], 'get_subject'))
     return 'What the subject?'
 
 
 def get_subject(params):
     params[1].update_mail('subject', params[2])
-    db_utils.save_sending_mail(params[0], params[1], 'get_msg')
+    save_sending_mail(Sending(params[0], params[1], 'get_msg'))
     return 'message?'
 
 def get_msg(params):
     params[1].update_mail('message', params[2])
-    db_utils.save_sending_mail(params[0], params[1], 'is_include_files')
+    save_sending_mail(Sending(params[0], params[1], 'is_include_files'))
     return 'want to add a file?'
 
 def is_include_files(params):
     if any(substring in params[2] for substring in ['no', 'not']):
         send_mail(params[1])
-        db_utils.save_sending_mail(params[0], None, None)
         return 'Your message sent successfully :)'
     #else
-    db_utils.save_sending_mail(params[0], params[1], 'get_file')
+    save_sending_mail(Sending(params[0], params[1], 'get_file'))
     return 'please attach a file'
 
 def get_file(params):
     params[1].update_mail('file', params[2])
     send_mail(params[1])
-    #db_utils.save_sending_mail(params[0], None, None)
-    db_utils.sent_mail(params[0], params[1], datetime.datetime.now())
+    save_sent_mail(Sent(params[0], params[1], str(datetime.datetime.now())))
     return 'Your message sent successfully :)'
 
 def send_emails_to_user(chat_id):
-    emails = db_utils.get_all_recived_unreaded_mails(chat_id)
+    emails = get_all_recived_unreaded_mails(chat_id)
     res_list_messages = []
-    for mail in emails:
+    for recived_mail in emails:
+        mail = recived_mail.mail
         message = "You got a mail from: {}\nDate: {}\nSubject: {}\nMessage: {}".format(mail.sender, mail.date, mail.subject, mail.msg)
         res_list_messages.append(message)
+        mark_readed_mail(mail._id)
     return res_list_messages
 
 def non_action(chat_id):
