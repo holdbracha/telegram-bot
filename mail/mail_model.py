@@ -4,8 +4,11 @@ from .mail_exception import MailException
 from .setting import TEMP_MAIL_URL_GET_ADDRESSES, TEMP_MAIL_URL_GET_MAIL_DATA, TEMP_MAIL_URL_GET_MAILS_LIST, TEMP_MAIL_URL_GET_MAIL_FILE
 import datetime
 from .send_mail import send_mail
+
+
 import sys
 sys.path.append('../')
+
 
 
 def get_new_mail_addr(count = 1):
@@ -20,7 +23,7 @@ def get_new_mail_addr(count = 1):
 
 
 
-def get_mail_list(mail_addr):
+def get_mail_list_from_mail_addr(mail_addr):
 
     try:
         user, domain = tuple(mail_addr.split("@"))
@@ -33,6 +36,7 @@ def get_mail_list(mail_addr):
 
 
 
+
 def get_mail_data(mail):
 
     try:
@@ -40,6 +44,8 @@ def get_mail_data(mail):
         res = requests.get(TEMP_MAIL_URL_GET_MAIL_DATA.format(user, domain, mail.mail_id))
         print(res)
         mail.set_mail_data_from_json(res)
+        chat_id = get_chat_id_by_mail_address(mail.receiver)
+        save_recived_mail(chat_id, mail.receiver, mail, mail.date, mail.mail_id)
         return mail
 
     except:
@@ -61,10 +67,11 @@ def get_mail_files(mail):
         raise MailException(f"error at get mail list of {mail.sender}", MailException.ERROR_FORMATTING_URL)
 
 
-
-
-
-
+def create_mail(chat_id):
+    mail_addr = get_mail_address_by_chat_id(chat_id) #func from db
+    mail = Mail()
+    mail.update_mail("sender", mail_addr)
+    return mail
 
 
 def create_mail_by_params(receiver, subject, msg, files=None, sender = "new" ):
@@ -72,7 +79,6 @@ def create_mail_by_params(receiver, subject, msg, files=None, sender = "new" ):
 
     if  sender == "new":
         sendr = get_new_mail_addr()[0]
-        #TODO - save new addr to db
     new_mail.sender = sender
     new_mail.date = datetime.datetime.now()
     new_mail.receiver = receiver
@@ -85,5 +91,13 @@ def create_mail_by_params(receiver, subject, msg, files=None, sender = "new" ):
         # there is no files
         new_mail.have_files = False
     new_mail.files = files
+
+
+
+def get_mail_from_dict(json_data):
+    mail = Mail(json_data["mail_id"])
+    mail.set_mail_data_from_json(json_data)
+    return mail
+
 
 
