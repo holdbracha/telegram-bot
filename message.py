@@ -1,11 +1,11 @@
-import brachi
+from db imoprt *
 
 class Message:
     def __init__(self, data):
         self.message = data['message']['text'].lower()
         self.chat_id = data['message']['chat']['id']
 
-        mail, action = brachi.get_sending_mail(self.chat_id)
+        mail, action = db.get_sending_mail(self.chat_id)
         if action is not None: # the user in the middle of sending proccess
             #if action in send_actions: # maybe unecessary
             self.action = action

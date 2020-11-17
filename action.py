@@ -1,5 +1,6 @@
 from mail import *
 import db_utils
+import datetime
 
 #send_actions = ['get_receiver', 'get_subject', 'get_msg', 'is_include_files', 'get_file']
 #send_actions_strings = ['Who is the recipient?', 'What the subject?', 'message?', 'want to add file?']
@@ -49,8 +50,7 @@ def get_file(params):
     params[1].update_mail('file', params[2])
     send_mail(params[1])
     #db_utils.save_sending_mail(params[0], None, None)
-    
-
+    db_utils.sent_mail(params[0], params[1], datetime.datetime.now())
     return 'Your message sent successfully :)'
 
 def send_emails_to_user(chat_id):
