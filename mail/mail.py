@@ -34,7 +34,10 @@ class Mail():
 
 
 
-
+def get_mail_from_dict(json_data):
+    mail = Mail(json_data["mail_id"])
+    mail.set_mail_data_from_json(json_data)
+    return mail
 
 
 mail = Mail()
