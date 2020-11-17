@@ -4,6 +4,8 @@ from .mail_exception import MailException
 from .setting import TEMP_MAIL_URL_GET_ADDRESSES, TEMP_MAIL_URL_GET_MAIL_DATA, TEMP_MAIL_URL_GET_MAILS_LIST, TEMP_MAIL_URL_GET_MAIL_FILE
 import datetime
 from .send_mail import send_mail
+import sys
+sys.path.append('../')
 
 
 def get_new_mail_addr(count = 1):
@@ -61,8 +63,7 @@ def get_mail_files(mail):
 
 
 
-def send_mail(mail):
-    send_mail(mail)
+
 
 
 

@@ -13,7 +13,8 @@ class Mail():
 
 
 
-
+    def update_mail(self, prop, value):
+        self.__dict__[prop] = value
 
     def set_mail_data_from_json(self, json_data):
         if json_data["id"] != self.mail_id:

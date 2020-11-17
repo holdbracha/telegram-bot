@@ -1,79 +1,42 @@
-
 import smtplib, ssl
-
-from string import Template
-
+# import necessary packages
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-MY_ADDRESS = 'kadima9876@gmail.com'
-PASSWORD = '0527131328'
+from .config import USERNAME_MAIL, PASSWORD_MAIL
+from .mail_exception import MailException
 
-def get_contacts():
-    """
-    Return two lists names, emails containing names and email addresses
-    read from a file specified by filename.
-    """
+smtp_server = "smtp.gmail.com"
+port = 587  # For starttls
+sender_email = USERNAME_MAIL
+password = PASSWORD_MAIL
 
-    names = ["sara"]
-    emails = ["sm5800810@gmail.com"]
+# Create a secure SSL context
+context = ssl.create_default_context()
 
-    return names, emails
+def send_mail(mail = None):
 
-def read_template():
-    """
-    Returns a Template object comprising the contents of the
-    file specified by filename.
-    """
-
-    return Template("""Dear ${PERSON_NAME},\n\n
-                    This is a test message. 
-                    Have a great weekend! \n\n
-                    Yours Truly""")
-
-def send_mail():
-    names, emails = get_contacts() #"sm5800810", "sm5800810@gmail.com"
-    message_template = read_template()
-
-
-    port = 465  # For SSL
-
-    # Create a secure SSL context
-    # context = ssl.create_default_context()
-    #
-    # with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as s:
-    #     # s.login("kadima9876@gmail.com", "0527131328")
-
-        # For each contact, send the email:
-    for name, email in zip(names, emails):
+    # Try to log in to server and send email
+    try:
         msg = MIMEMultipart()       # create a message
 
         # add in the actual person name to the message template
-        message = message_template.substitute(PERSON_NAME=name.title())
-
-        # Prints out the message body for our sake
-        print(message)
+        message = mail.msg + f"\n please return answer to {mail.sender}"
 
         # setup the parameters of the message
-        msg['From']="kadima1313@gmail.com"
-        msg['To']=email
-        msg['Subject']="This is TEST"
+        msg['From']= f"{mail.sender} <AnonyMailBotTelegram@gmail.com>"#str(Header('Magnus Eisengrim <meisen99@gmail.com>'))
+        msg['To']= mail.receiver
+        msg['Subject']=mail.subject
 
         # add in the message body
         msg.attach(MIMEText(message, 'plain'))
-
-        # send the message via the server set up earlier.
-        #     s.send_message(msg)
-        try:
-           smtpObj = smtplib.SMTP('localhost')
-           smtpObj.send_message(msg)
-           print("Successfully sent email")
-        except Exception as e:
-           print("Error: unable to send email", e)
-        del msg
-
-    # # Terminate the SMTP session and close the connection
-    # s.quit()
-
-if __name__ == '__main__':
-    send_mail()
+        with smtplib.SMTP(smtp_server, port) as server:
+            server.ehlo()  # Can be omitted
+            server.starttls(context=context)
+            server.ehlo()  # Can be omitted
+            server.login(sender_email, password)
+            server.send_message(msg)
+    except Exception as e:
+        # Print any error messages to stdout
+        print(e)
+        raise MailException("error while sending mail: "+str(e), MailException.ERROR_SEND_MAIL)
