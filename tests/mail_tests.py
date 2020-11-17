@@ -2,6 +2,7 @@ import sys
 sys.path.append('../')
 from mail import *
 from db_pkg import *
+import server
 
 def test_send_mail():
     mail = Mail()
@@ -23,4 +24,22 @@ def test_create_address():
     assert (get_mail_address_by_chat_id(temp_chat_id) == new_addr)
     assert (get_chat_id_by_mail_address(new_addr) == temp_chat_id)
 
-# def test_get_
+def test_get_new_mails():
+    temp_chat_id = 1434038438
+    sender_addr = get_new_mail_addr()
+    add_mail_address(temp_chat_id, sender_addr)
+    receiver_mail = get_new_mail_addr()
+    add_mail_address(temp_chat_id, receiver_mail)
+
+    mail = Mail()
+    mail.update_mail("sender", sender_addr)
+    mail.update_mail("subject", "hello all")
+    mail.update_mail("msg", "this is the msg")
+    mail.update_mail("receiver", receiver_mail)
+    send_mail(mail)
+
+    chat_id, num = get_mail_list_from_mail_addr(receiver_mail)
+    if num > 0:
+        print(num, chat_id)
+    server.send_messages_to_user(chat_id)
+

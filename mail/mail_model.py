@@ -35,7 +35,10 @@ def get_mail_list_from_mail_addr(mail_addr):
             get_mail_data(mail)
 
         delete_mail_list_was_saved(mail_data)
-        return i
+        chat_id = ""
+        if i > 0:
+            chat_id = get_chat_id_by_mail_address(mail_addr)
+        return chat_id, i
 
     except:
         raise MailException(f"error at get mail list of {mail_addr}", MailException.ERROR_FORMATTING_URL)
@@ -47,6 +50,7 @@ def get_mail_data(mail):
     try:
         user, domain = tuple(mail.sender.split("@"))
         res = requests.get(TEMP_MAIL_URL_GET_MAIL_DATA.format(user, domain, mail.mail_id))
+        res["mail_id"] = res["id"]
         print(res)
         mail.set_mail_data_from_json(res)
         chat_id = get_chat_id_by_mail_address(mail.receiver)
@@ -56,6 +60,7 @@ def get_mail_data(mail):
 
     except:
         raise MailException(f"error at get mail list of {mail.sender}", MailException.ERROR_FORMATTING_URL)
+
 
 
 def delete_mail_list_was_saved(mail_addr):
@@ -70,6 +75,7 @@ def delete_mail_list_was_saved(mail_addr):
         )
     except:
         raise MailException("invalid address mail or error by deleting mails", MailException.WRONG_RECEIVER)
+
 
 def get_mail_files(mail):
 
@@ -86,7 +92,7 @@ def get_mail_files(mail):
 
 
 def create_mail(chat_id):
-    mail_addr = get_mail_address_by_chat_id(chat_id) #func from db
+    mail_addr = get_curr_mail_address_by_chat_id(chat_id) #func from db
     mail = Mail()
     mail.update_mail("sender", mail_addr)
     return mail
@@ -96,7 +102,7 @@ def create_mail_by_params(receiver, subject, msg, files=None, sender = "new" ):
     new_mail =  Mail()
 
     if  sender == "new":
-        sendr = get_new_mail_addr()[0]
+        sender = get_new_mail_addr()
     new_mail.sender = sender
     new_mail.date = datetime.datetime.now()
     new_mail.receiver = receiver
@@ -118,12 +124,7 @@ def get_mail_from_dict(json_data):
     return mail
 
 
-def check_new_mails(): #will calles every minute by cron job
-    addresses = get_all_mail_address()
-    for addr in addresses:
-        num_of_new_mails = get_mail_list_from_mail_addr(addr["address"])
-        if num_of_new_mails > 0:
-            send_new_msg_to_user()
+
 
 
 

@@ -1,9 +1,13 @@
 from .mail_exception import MailException
+from db_pkg import *
 
 class Mail():
-    def __init__(self, mail_id = -1):
+    def __init__(self, mail_id = -1, operation = "receive"):
         self.mail_id = mail_id
         self.sender = None
+        if operation == "send":
+            self.sender = get_mail_address_by_chat_id(mail_id)
+
         self.receiver = None
         self.date = None
         self.subject = None
@@ -17,7 +21,7 @@ class Mail():
         self.__dict__[prop] = value
 
     def set_mail_data_from_json(self, json_data):
-        if json_data["id"] != self.mail_id:
+        if json_data["mail_id"] != self.mail_id:
             raise MailException("msg id is diffrent from object mail", MailException.WRONG_MAIL_ID)
 
         self.sender = json_data.get("from")
