@@ -3,7 +3,7 @@ import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from .config import USERNAME_MAIL, PASSWORD_MAIL
+from config import USERNAME_MAIL, PASSWORD_MAIL
 from .mail_exception import MailException
 
 smtp_server = "smtp.gmail.com"
