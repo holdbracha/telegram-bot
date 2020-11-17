@@ -37,12 +37,11 @@ def save_recived_mail(recived): # if mail_primary_key is exit -> not saving. set
     return result
 
 def add_mail_address(chat_id, address):
-    mail_address = {"_id":chat_id, "address":address}
-    if not address_mail_colection.find_one({'_id':chat_id}):
+    mail_address = {"chat_id":chat_id, "address":address}
+    if not address_mail_colection.find_one(mail_address):
+        address_mail_colection.find_one_and_update({"current":True}, {"$set":{"current":False}})
+        mail_address["current"] = True
         address_mail_colection.insert_one(mail_address)
-    else:
-        address_mail_colection.find_one_and_update({"_id":chat_id}, {"$set":{"address":address}})
-
 
 
 def get_all_sent_mails(chat_id): #return list of all sent mails of this user. return [] if there is no chat id that sent
@@ -57,8 +56,7 @@ def get_all_sent_mails(chat_id): #return list of all sent mails of this user. re
 def get_sending_mail(chat_id): # return sending object by chat id. return None if there is no chat id in sending
     return sending_colection.find_one({"_id":chat_id})
     # return get_sending_from_dict(res)
-    
-
+   
 
 def get_all_recived_mails(chat_id): #return list of all recived mails of this user. return [] if there is no chat id that recived
     return list(recived_colection.find({"chat_id":chat_id}))
@@ -76,8 +74,15 @@ def mark_readed_mail(mail_primary_key): # set is_readed = True.
 def get_chat_id_by_mail_address(mail_address):
     return address_mail_colection.find_one({"address":mail_address})["_id"]
 
-def get_mail_address_by_chat_id(chat_id):
-    return address_mail_colection.find_one({"_id":chat_id})["address"]
+def get_all_mail_address_by_chat_id(chat_id):
+    results = address_mail_colection.find({"_id":chat_id})
+    result = []
+    for res in results:
+        result.append(res["address"])
+
+def get_curr_mail_address_by_chat_id(chat_id):
+    return address_mail_colection.find_one({"_id":chat_id, "current":True})["address"]
+
 
 
 def get_all_mail_address():
