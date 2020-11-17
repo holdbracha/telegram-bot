@@ -10,8 +10,9 @@ class Message:
         sending = get_sending_mail(self.chat_id)
         if sending is not None: # the user in the middle of sending proccess
             #if action in send_actions: # maybe unecessary
-            self.action = sending['next_action']
-            self.params = (self.chat_id, sending['mail'], self.message)
+            sending = get_sending_from_dict(sending)
+            self.action = sending.next_action
+            self.params = (self.chat_id, sending.mail, self.message)
         elif any(substring in self.message for substring in ['create', 'open', 'new']):
             self.action = 'createTempMail'
             self.params = self.chat_id

@@ -1,6 +1,7 @@
 from .mail_exception import MailException
 
 class Mail():
+
     def __init__(self, mail_id = -1):
         self.mail_id = mail_id
         self.sender = None
@@ -17,8 +18,8 @@ class Mail():
         self.__dict__[prop] = value
 
     def set_mail_data_from_json(self, json_data):
-        if json_data["id"] != self.mail_id:
-            raise MailException("msg id is diffrent from object mail", MailException.WRONG_MAIL_ID)
+        if json_data["mail_id"] != self.mail_id:
+            raise MailException("msg id is different from object mail", MailException.WRONG_MAIL_ID)
 
         self.sender = json_data.get("from")
         self.receiver = json_data.get("to")
