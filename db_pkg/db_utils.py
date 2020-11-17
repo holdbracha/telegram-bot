@@ -21,12 +21,12 @@ def save_sent_mail(sent): #void func. get dict o sent. saving the email in sent 
     sent_colection.insert_one(sent)
     sending_colection.delete_one({"_id":sent["chat_id"]})
 
-def save_sending_mail(sendig): # chat id is primary key.
-    if not sending_colection.find_one({"_id":sendig["chat_id"]}):
-        sending_colection.insert_one(sendig)
+def save_sending_mail(sending): # chat id is primary key.
+    if not sending_colection.find_one({"_id":sending["chat_id"]}):
+        sending_colection.insert_one(sending)
     else:
-        sending_colection.find_one_and_replace({"_id":sendig["chat_id"]}, sendig)
-    sending_colection.insert_one(sendig)
+        sending_colection.find_one_and_replace({"_id":sending["chat_id"]}, sending)
+    sending_colection.insert_one(sending)
 
 def save_recived_mail(recived): # if mail_primary_key is exit -> not saving. set is_readed = False
     result = True
@@ -38,7 +38,7 @@ def save_recived_mail(recived): # if mail_primary_key is exit -> not saving. set
 
 def add_mail_address(chat_id, address):
     mail_address = {"_id":chat_id, "address":address}
-    if not address_mail_colection.find_one(mail_address):
+    if not address_mail_colection.find_one({'_id':chat_id}):
         address_mail_colection.insert_one(mail_address)
     else:
         address_mail_colection.find_one_and_update({"_id":chat_id}, {"$set":{"address":address}})
