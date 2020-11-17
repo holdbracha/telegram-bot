@@ -11,7 +11,7 @@ import datetime
 
 def create_temp_mail(chat_id):
     mail_address = get_new_mail_addr(chat_id)
-    add_mail_address(mail_address, chat_id)
+    add_mail_address(chat_id, mail_address)
     return mail_address
 
 

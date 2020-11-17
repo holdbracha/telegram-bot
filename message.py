@@ -2,6 +2,8 @@ from db_pkg import *
 
 class Message:
     def __init__(self, data):
+        if data.get('edited_message'):
+            return False
         self.message = data['message']['text'].lower()
         self.chat_id = data['message']['chat']['id']
 

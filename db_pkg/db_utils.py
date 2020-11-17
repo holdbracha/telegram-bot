@@ -38,7 +38,7 @@ def save_recived_mail(recived): # if mail_primary_key is exit -> not saving. set
 
 def add_mail_address(chat_id, address):
     mail_address = {"_id":chat_id, "address":address}
-    if not address_mail_colection.find_one(mail_address):
+    if not address_mail_colection.find_one({'_id':chat_id}):
         address_mail_colection.insert_one(mail_address)
     else:
         address_mail_colection.find_one_and_update({"_id":chat_id}, {"$set":{"address":address}})
