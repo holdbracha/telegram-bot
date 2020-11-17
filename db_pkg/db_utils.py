@@ -56,8 +56,7 @@ def get_all_sent_mails(chat_id): #return list of all sent mails of this user. re
 def get_sending_mail(chat_id): # return sending object by chat id. return None if there is no chat id in sending
     return sending_colection.find_one({"_id":chat_id})
     # return get_sending_from_dict(res)
-    
-
+   
 
 def get_all_recived_mails(chat_id): #return list of all recived mails of this user. return [] if there is no chat id that recived
     return list(recived_colection.find({"chat_id":chat_id}))
