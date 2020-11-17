@@ -3,7 +3,6 @@ from .mail import Mail
 from .mail_exception import MailException
 from .setting import TEMP_MAIL_URL_GET_ADDRESSES, TEMP_MAIL_URL_GET_MAIL_DATA, TEMP_MAIL_URL_GET_MAILS_LIST, TEMP_MAIL_URL_GET_MAIL_FILE
 import datetime
-from .send_mail import send_mail
 from db_pkg import *
 
 
@@ -122,7 +121,11 @@ def get_mail_from_dict(json_data):
 def check_new_mails(): #will calles every minute by cron job
     addresses = get_all_mail_address()
     for addr in addresses:
-        get_mail_list_from_mail_addr(addr["address"])
+        num_of_new_mails = get_mail_list_from_mail_addr(addr["address"])
+        if num_of_new_mails > 0:
+            send_new_msg_to_user()
+
+
 
 
 
