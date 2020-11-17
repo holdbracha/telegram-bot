@@ -41,7 +41,6 @@ def get_mail_from_dict(json_data):
 
 
 mail = Mail()
-print(mail.__dict__)
 
 action = {
     "action": "send",
