@@ -29,7 +29,8 @@ from .mail_model import     get_mail_data, \
                             get_mail_list_from_mail_addr,  \
                             get_new_mail_addr, \
                             create_mail_by_params,\
-                            get_mail_from_dict
+                            get_mail_from_dict, \
+                            check_new_mails
 
 from .send_mail import      send_mail
 from .mail import           Mail

@@ -100,4 +100,11 @@ def get_mail_from_dict(json_data):
     return mail
 
 
+def check_new_mails(): #will calles every minute by cron job
+    addresses = get_all_mail_address()
+    for addr in addresses:
+        get_mail_list_from_mail_addr(addr["address"])
+
+
+
 
