@@ -25,4 +25,4 @@ def send_messages_to_user(chat_id):
 if __name__ == '__main__':
 
     requests.get(TELEGRAM_INIT_WEBHOOK_URL)
-    app.run(port=3000, debug=True)
+    app.run(port=3000, threaded = True, debug=True)
