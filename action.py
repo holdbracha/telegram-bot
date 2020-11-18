@@ -1,5 +1,12 @@
-from mail import *
-from db_pkg import *
+
+try:
+    from db_pkg import *
+except:
+    pass
+try:
+    from mail import *
+except:
+    pass
 import datetime
 
 #send_actions = ['get_receiver', 'get_subject', 'get_msg', 'is_include_files', 'get_file']

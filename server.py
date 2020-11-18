@@ -3,7 +3,10 @@ import requests
 from config import *
 from message import *
 from action import get_action
-from mail import *
+try:
+    from mail import *
+except:
+    pass
 
 app = Flask(__name__, static_url_path='', static_folder='dist')
 req_action = None

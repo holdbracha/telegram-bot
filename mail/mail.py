@@ -1,5 +1,8 @@
 from .mail_exception import MailException
-from db_pkg.db_utils import get_curr_mail_address_by_chat_id
+try:
+    from db_pkg.db_utils import get_curr_mail_address_by_chat_id
+except:
+    pass
 
 class Mail():
     def __init__(self, mail_id = -1, operation = "receive"):
@@ -37,18 +40,6 @@ class Mail():
         except:
             self.have_files = False
 
-
-
-
-
-mail = Mail()
-
-action = {
-    "action": "send",
-    "subject": "kush",
-    "add files":"yes",
-    "last":"subject"
-}
 
 
 

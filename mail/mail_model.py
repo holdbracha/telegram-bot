@@ -3,11 +3,15 @@ from .mail import Mail
 from .mail_exception import MailException
 from .setting import TEMP_MAIL_URL_GET_ADDRESSES, TEMP_MAIL_URL_GET_MAIL_DATA, TEMP_MAIL_URL_GET_MAILS_LIST, TEMP_MAIL_URL_GET_MAIL_FILE
 import datetime
-from db_pkg import *
+try:
+    from db_pkg import *
+except:
+    pass
+#from db_pkg import Recived
 
 
-import sys
-sys.path.append('../')
+#import sys
+#sys.path.append('../')
 
 
 
@@ -41,8 +45,8 @@ def get_mail_list_from_mail_addr(mail_addr):
             chat_id = get_chat_id_by_mail_address(mail_addr)
         return chat_id, i+1
 
-    except:
-        raise MailException(f"error at get mail list of {mail_addr}", MailException.ERROR_FORMATTING_URL)
+    except Exception as e:
+        raise MailException(f"error at get mail list of {mail_addr} ::::: {e}", MailException.ERROR_FORMATTING_URL)
 
 
 
@@ -61,8 +65,8 @@ def get_mail_data(mail):
         save_recived_mail(received_ob)
         return mail
 
-    except:
-        raise MailException(f"error at get mail list of {mail.sender}", MailException.ERROR_FORMATTING_URL)
+    except Exception as e:
+        raise MailException(f"error at get mail list of {mail.sender}:::::::: {e}", MailException.ERROR_FORMATTING_URL)
 
 
 

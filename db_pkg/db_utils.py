@@ -29,8 +29,8 @@ def save_sending_mail(sending): # chat id is primary key.
     if not sending_colection.find_one({"_id":sending["_id"]}):
         sending_colection.insert_one(sending)
     else:
-        #sending_colection.find_one_and_replace({"_id":sending["_id"]}, sending)
-        sending_colection.find_one_and_replace({"_id":sending["chat_id"]}, sending)
+        sending_colection.find_one_and_replace({"_id":sending["_id"]}, sending)
+        #sending_colection.find_one_and_replace({"_id":sending["chat_id"]}, sending)
 
 
 def save_recived_mail(recived): # if mail_primary_key is exit -> not saving. set is_readed = False
