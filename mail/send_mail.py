@@ -26,7 +26,7 @@ def send_mail(mail = None):
         msg = MIMEMultipart()       # create a message
 
         # add in the actual person name to the message template
-        message = mail.msg + f"\n please return answer to {mail.sender}"
+        message = mail.msg + f"\n\n please return answer to {mail.sender}"
 
         # setup the parameters of the message
         msg['From']= f"{mail.sender} <AnonyMailBotTelegram@gmail.com>"#str(Header('Magnus Eisengrim <meisen99@gmail.com>'))
