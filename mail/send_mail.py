@@ -3,7 +3,7 @@ import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import requests
-
+import io
 from config import USERNAME_MAIL, PASSWORD_MAIL
 from .mail_exception import MailException
 
@@ -48,16 +48,19 @@ def send_mail(mail = None):
 
 
 
+def sendImage():
+    url = "https://api.telegram.org/bot<Token>/sendPhoto";
+    files = {'photo': open('/path/to/img.jpg', 'rb')}
+    data = {'chat_id' : "YOUR_CHAT_ID"}
+    r= requests.post(url, files=files, data=data)
+    print(r.status_code, r.reason, r.content)
 
-def get_url():
-    contents = requests.get('https://random.dog/woof.json').json()
-    url = contents['url']
-    return url
-
-
-
-
-def bop(bot, update):
-    url = get_url()
-    chat_id = update.message.chat_id
-    bot.send_photo(chat_id=chat_id, photo=url)
+def sendImageRemoteFile(img_url):
+    url = "https://api.telegram.org/bot<Token>/sendPhoto";
+    remote_image = requests.get(img_url)
+    photo = io.BytesIO(remote_image.content)
+    photo.name = 'img.png'
+    files = {'photo': photo}
+    data = {'chat_id' : "YOUR_CHAT_ID"}
+    r= requests.post(url, files=files, data=data)
+    print(r.status_code, r.reason, r.content)
