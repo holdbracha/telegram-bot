@@ -13,7 +13,7 @@ sent_colection = db["sent"]
 sending_colection = db["sending"]
 recived_colection = db["recived"]
 address_mail_colection = db["address_mail"]
-
+black_list_colection = db["black_list"]
 
 
 
@@ -98,17 +98,30 @@ def get_all_mail_address():
     return list(docs)
 
 ######Black List#######################################
-def get_num_of_messages_between_times(chat_id, from_tme):
-    pass
+def get_num_of_messages_between_times(chat_id, from_time):
+    sent_list = list(sent_colection.find({"chat_id":chat_id}))
+    sum = 0
+    for s in sent_list:
+        if s["time"] > from_time:
+            sum += 1
+    return sum
 
 def add_user_to_black_list(chat_id):
-    pass
+    try:
+        black_list_colection.insert_one({"_id":chat_id})
+    except pymongo.errors.DuplicateKeyError:
+        pass
 
 def get_black_list():
-    pass
-
+    b_list = black_list_colection.find({})
+    res = []
+    for b in b_list:
+        res.append(b["_id"])
+    return res
 def is_in_black_list(chat_id):
-    pass
+    if black_list_colection.find_one({"_id":chat_id}):
+        return True
+    return False
 
 ########encrypted password################################
 def save_encrypted_key(EncryptedKey):
