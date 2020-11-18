@@ -18,9 +18,10 @@ def handle_message():
     chat_id = request.get_json()['message']['chat']['id']
     if is_in_black_list(chat_id):
         res = requests.get(TELEGRAM_RES.format(TOKEN, chat_id, "You are blocked!"))
-    message = Message(request.get_json())
-    res_message = get_action(message.action, message.params)
-    res = requests.get(TELEGRAM_RES.format(TOKEN, message.chat_id, res_message))
+    else:
+        message = Message(request.get_json())
+        res_message = get_action(message.action, message.params)
+        res = requests.get(TELEGRAM_RES.format(TOKEN, message.chat_id, res_message))
     return Response("success")
 
 @app.route('/sendEmailsToUser/<chat_id>', methods=["GET"])
