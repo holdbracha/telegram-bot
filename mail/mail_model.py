@@ -1,5 +1,12 @@
 import requests
-from .mail import Mail
+try:
+    from db_pkg import recived
+except:
+    pass
+try:
+    from .mail import Mail
+except:
+    pass
 from .mail_exception import MailException
 from .setting import TEMP_MAIL_URL_GET_ADDRESSES, TEMP_MAIL_URL_GET_MAIL_DATA, TEMP_MAIL_URL_GET_MAILS_LIST, TEMP_MAIL_URL_GET_MAIL_FILE
 import datetime
@@ -56,7 +63,7 @@ def get_mail_data(mail):
         print(res_json)
         mail.set_mail_data_from_json(res_json)
         chat_id = get_chat_id_by_mail_address(mail.receiver)
-        received_ob = Recived(chat_id, mail, mail.date, mail.mail_id)
+        received_ob = recived.Recived(chat_id, mail, mail.date, mail.mail_id)
         save_recived_mail(received_ob)
         return mail
 
