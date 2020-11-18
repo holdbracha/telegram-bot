@@ -2,7 +2,7 @@
 TOKEN = '1401486158:AAHSWmn-go9jvblVARbpozB-OzaAM51zdJU'
 NGROK_URL = 'https://d59586221dac.ngrok.io'
 TELEGRAM_INIT_WEBHOOK_URL = 'https://api.telegram.org/bot{}/setWebhook?url={}/message'.format(TOKEN, NGROK_URL)
-TELEGRAM_RES = "https://api.telegram.org/bot{}/sendMessage?chat_id={}&text={}&parse_mode=HTML"#&parse_mode=html"
+TELEGRAM_RES = "https://api.telegram.org/bot{}/sendMessage?parse_mode=MARKDOWN&chat_id={}&text={}"#&parse_mode=html"
 
 MONGO_PASSWORD = "brachasaraor"
 MONGO_DB = "singular"

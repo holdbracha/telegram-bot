@@ -10,11 +10,6 @@ except:
 #from db_pkg import Recived
 
 
-#import sys
-#sys.path.append('../')
-
-
-
 def get_new_mail_addr(count = 1):
 
     try:

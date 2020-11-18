@@ -2,6 +2,7 @@ import smtplib, ssl
 # import necessary packages
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import requests
 
 from config import USERNAME_MAIL, PASSWORD_MAIL
 from .mail_exception import MailException
@@ -44,3 +45,19 @@ def send_mail(mail = None):
         # Print any error messages to stdout
         print(e)
         raise MailException("error while sending mail: "+str(e), MailException.ERROR_SEND_MAIL)
+
+
+
+
+def get_url():
+    contents = requests.get('https://random.dog/woof.json').json()
+    url = contents['url']
+    return url
+
+
+
+
+def bop(bot, update):
+    url = get_url()
+    chat_id = update.message.chat_id
+    bot.send_photo(chat_id=chat_id, photo=url)

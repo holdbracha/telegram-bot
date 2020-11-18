@@ -37,10 +37,10 @@ def test_get_new_mails():
     # mail.update_mail("msg", "this is the msg")
     # mail.update_mail("receiver", receiver_mail)
     # send_mail(mail)
-    receiver_mail = "02zl36ogy7n@wwjmp.com"#"gd9kkvicamt@wwjmp.com"
-
-    chat_id, num = get_mail_list_from_mail_addr(receiver_mail)
-    if num > 0:
-        print(num, chat_id)
-    server.send_messages_to_user(chat_id)
+    # receiver_mail = "exaar5f58z@1secmail.org"#"02zl36ogy7n@wwjmp.com"#"gd9kkvicamt@wwjmp.com"
+    server.check_new_mails()
+    # chat_id, num = get_mail_list_from_mail_addr(receiver_mail)
+    # if num > 0:
+    #     print(num, chat_id)
+    # server.send_messages_to_user(chat_id)
 
