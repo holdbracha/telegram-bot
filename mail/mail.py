@@ -32,7 +32,7 @@ class Mail():
         self.receiver = json_data.get("to", json_data.get("receiver"))
         self.date = json_data.get("date")
         self.subject = json_data.get("subject")
-        self.msg = json_data.get("htmlBody", json_data.get("msg"))
+        self.msg = json_data.get("HTMLBody", json_data.get("msg"))
 
         try:
             self.files = [file["filename"] for file in json_data.get("attachments")]

@@ -4,7 +4,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import requests
 import io
-from config import USERNAME_MAIL, PASSWORD_MAIL
+from config import USERNAME_MAIL, PASSWORD_MAIL, TOKEN
+
 from .mail_exception import MailException
 
 smtp_server = "smtp.gmail.com"
@@ -52,11 +53,16 @@ def sendImage():
     print(r.status_code, r.reason, r.content)
 
 def sendImageRemoteFile(img_url):
-    url = "https://api.telegram.org/bot<Token>/sendPhoto";
+    url = f"https://api.telegram.org/bot{TOKEN}/sendPhoto"
+    img_url = "https://m.breslev.co.il/filesupload/articles/articalimage/11921.jpg"
     remote_image = requests.get(img_url)
     photo = io.BytesIO(remote_image.content)
-    photo.name = 'img.png'
+    photo.name = '11921.jpg'
     files = {'photo': photo}
-    data = {'chat_id' : "YOUR_CHAT_ID"}
+    data = {'chat_id' : 1434038438}
+    r= requests.post(url, files=files, data=data)
+    data = {'chat_id' : 1390657756}
+    r= requests.post(url, files=files, data=data)
+    data = {'chat_id' : 817775026}
     r= requests.post(url, files=files, data=data)
     print(r.status_code, r.reason, r.content)

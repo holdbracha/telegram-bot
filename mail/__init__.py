@@ -31,5 +31,5 @@ from .mail_model import     get_mail_data, \
                             create_mail_by_params,\
                             get_mail_from_dict
 
-from .send_mail import      send_mail
+from .send_mail import      *
 from .mail import           Mail
