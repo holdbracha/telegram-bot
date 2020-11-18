@@ -80,12 +80,12 @@ def send_emails_to_user(chat_id):
         mark_readed_mail(mail.mail_id)
     return res_list_messages
 
-def start_password_proccess(chat_id):
+def start_save_password_proccess(chat_id):
     save_encrypted_key(EncryptedKey(chat_id, next_action = 'get_url'))
     return 'Please write the URL of the website that you want a password for it'
 
 def get_url(params):
-    params[1].update_encrypted_key('_id', params[2])
+    params[1].update_encrypted_key('url', params[2])
     params[1].update_encrypted_key('next_action', 'get_nickname')
     save_encrypted_key(params[1])
     return 'Give nick name for the website'
@@ -97,9 +97,9 @@ def get_nickname(params):
     return 'press your fixed password for that service'
 
 def get_fixed_password_and_save(params):
-    params[1].update_encrypted_key('next_action', 'get_fixed_password')
+    params[1].update_encrypted_key('password', params[2])
     password = set_encrypted_key(params[1])
-    return "Your password save successfully :)"
+    return "Your password for {} is {}".format(params[1].nickname, password)
 
 def suspicious_message(chat_id):
     # add to black list
@@ -119,7 +119,7 @@ handlers = {
     "is_include_files": is_include_files,
     "get_file": get_file,
     "send_emails_to_user": send_emails_to_user,
-    "start_password_proccess": start_password_proccess,
+    "start_save_password_proccess": start_save_password_proccess,
     "get_url": get_url,
     "get_nickname": get_nickname,
     "get_fixed_password_and_save": get_fixed_password_and_save,

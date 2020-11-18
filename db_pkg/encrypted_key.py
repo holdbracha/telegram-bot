@@ -2,8 +2,8 @@ from cryptography.fernet import Fernet, InvalidToken
 
 class EncryptedKey:
     def __init__(self, chat_id, url = None, nickname = None, password = None, next_action = None):
-        self._chat_id = chat_id
-        self._id = url
+        self.chat_id = chat_id
+        self.url = url
         self.nickname = nickname
         self.password = password
         self.next_action = next_action
@@ -26,6 +26,6 @@ class EncryptedKey:
         return decrypted.decode() # real password
 
 def get_EncryptedKey_from_dict(EncryptedKey_dict):
-    e = EncryptedKey(EncryptedKey_dict["chat_id"], EncryptedKey_dict["_id"], EncryptedKey_dict["nickname"], EncryptedKey_dict["password"], EncryptedKey_dict["next_action"])
+    e = EncryptedKey(EncryptedKey_dict["chat_id"], EncryptedKey_dict["url"], EncryptedKey_dict["nickname"], EncryptedKey_dict["password"], EncryptedKey_dict["next_action"])
     return e
 
