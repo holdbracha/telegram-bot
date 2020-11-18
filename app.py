@@ -44,7 +44,9 @@ def check_new_mails(): #will calles every minute by cron job
     # return Response("success")
 
 
-
+@app.route('/')
+def index():
+    return "<h1>Welcome to our server !!</h1>"
 
 
 
