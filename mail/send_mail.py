@@ -2,6 +2,7 @@ import smtplib, ssl
 # import necessary packages
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import requests
 
 from config import USERNAME_MAIL, PASSWORD_MAIL
 from .mail_exception import MailException
@@ -16,6 +17,10 @@ context = ssl.create_default_context()
 
 def send_mail(mail = None):
 
+    print(mail.sender)
+    print(mail.msg)
+    print(mail.subject)
+    print(mail.receiver)
     # Try to log in to server and send email
     try:
         msg = MIMEMultipart()       # create a message
@@ -29,7 +34,7 @@ def send_mail(mail = None):
         msg['Subject']=mail.subject
 
         # add in the message body
-        msg.attach(MIMEText(message, 'plain'))
+        msg.attach(MIMEText(message, 'html'))
         with smtplib.SMTP(smtp_server, port) as server:
             server.ehlo()  # Can be omitted
             server.starttls(context=context)
@@ -40,3 +45,19 @@ def send_mail(mail = None):
         # Print any error messages to stdout
         print(e)
         raise MailException("error while sending mail: "+str(e), MailException.ERROR_SEND_MAIL)
+
+
+
+
+def get_url():
+    contents = requests.get('https://random.dog/woof.json').json()
+    url = contents['url']
+    return url
+
+
+
+
+def bop(bot, update):
+    url = get_url()
+    chat_id = update.message.chat_id
+    bot.send_photo(chat_id=chat_id, photo=url)

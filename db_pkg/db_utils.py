@@ -1,4 +1,4 @@
-from mail.mail import get_mail_from_dict
+
 from config import MONGO_URL
 import pymongo
 from pymongo import MongoClient
@@ -18,23 +18,29 @@ address_mail_colection = db["address_mail"]
 
 
 def save_sent_mail(sent): #void func. get dict o sent. saving the email in sent table and deleting the mail from sending table.
+    sent = sent.__dict__
+    sent['mail'] = sent['mail'].__dict__
     sent_colection.insert_one(sent)
     sending_colection.delete_one({"_id":sent["chat_id"]})
 
 def save_sending_mail(sending): # chat id is primary key.
-    if not sending_colection.find_one({"_id":sending["chat_id"]}):
+    sending = sending.__dict__
+    sending['mail'] = sending['mail'].__dict__
+    if not sending_colection.find_one({"_id":sending["_id"]}):
         sending_colection.insert_one(sending)
     else:
-        sending_colection.find_one_and_replace({"_id":sending["chat_id"]}, sending)
-    sending_colection.insert_one(sending)
+        sending_colection.find_one_and_replace({"_id":sending["_id"]}, sending)
+        #sending_colection.find_one_and_replace({"_id":sending["chat_id"]}, sending)
+
 
 def save_recived_mail(recived): # if mail_primary_key is exit -> not saving. set is_readed = False
-    result = True
     try:
-        recived_colection.insert_one(recived)
+        recived.mail = recived.mail.__dict__
+        recived_colection.insert_one(recived.__dict__)
+        return True
+
     except pymongo.errors.DuplicateKeyError:
-        result = False
-    return result
+        return False
 
 def add_mail_address(chat_id, address):
     mail_address = {"chat_id":chat_id, "address":address}
@@ -71,16 +77,22 @@ def get_all_recived_readed_mails(chat_id):
 def mark_readed_mail(mail_primary_key): # set is_readed = True.
     recived_colection.find_one_and_update({"_id":mail_primary_key}, {"$set":{"readed":True}})
 
+
 def get_chat_id_by_mail_address(mail_address):
-    return address_mail_colection.find_one({"address":mail_address})["_id"]
+    #return address_mail_colection.find_one({"address": mail_address})["_id"]
+    addresses =  address_mail_colection.find_one({"address":mail_address})
+    return str(addresses["chat_id"])
+
 
 def get_all_mail_address_by_chat_id(chat_id):
-    results = address_mail_colection.find({"_id":chat_id})
+    results = address_mail_colection.find({"chat_id":chat_id})
     result = []
     for res in results:
         result.append(res["address"])
 
 def get_curr_mail_address_by_chat_id(chat_id):
-    return address_mail_colection.find_one({"_id":chat_id, "current":True})["address"]
+    return address_mail_colection.find_one({"chat_id":chat_id, "current":True})["address"]
 
-
+def get_all_mail_address():
+    docs = address_mail_colection.find()
+    return list(docs)

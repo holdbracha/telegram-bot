@@ -1,4 +1,7 @@
-from mail.mail import *
+try:
+    from mail.mail_model import get_mail_from_dict
+except:
+    pass
 
 class Sent:
     def __init__(self, chat_id = None, mail = None, time = None):
