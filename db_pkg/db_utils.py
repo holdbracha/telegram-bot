@@ -1,4 +1,4 @@
-from mail.mail import get_mail_from_dict
+
 from config import MONGO_URL
 import pymongo
 from pymongo import MongoClient
@@ -18,6 +18,8 @@ address_mail_colection = db["address_mail"]
 
 
 def save_sent_mail(sent): #void func. get dict o sent. saving the email in sent table and deleting the mail from sending table.
+    sent = sent.__dict__
+    sent['mail'] = sent['mail'].__dict__
     sent_colection.insert_one(sent)
     sending_colection.delete_one({"_id":sent["chat_id"]})
 
@@ -72,8 +74,9 @@ def get_all_recived_readed_mails(chat_id):
 def mark_readed_mail(mail_primary_key): # set is_readed = True.
     recived_colection.find_one_and_update({"_id":mail_primary_key}, {"$set":{"readed":True}})
 
+
 def get_chat_id_by_mail_address(mail_address):
-    return address_mail_colection.find_one({"address":mail_address})["_id"]
+    return address_mail_colection.find_one({"address": mail_address})["_id"]
 
 def get_all_mail_address_by_chat_id(chat_id):
     results = address_mail_colection.find({"_id":chat_id})
@@ -83,8 +86,6 @@ def get_all_mail_address_by_chat_id(chat_id):
 
 def get_curr_mail_address_by_chat_id(chat_id):
     return address_mail_colection.find_one({"_id":chat_id, "current":True})["address"]
-
-
 
 def get_all_mail_address():
     docs = address_mail_colection.find()

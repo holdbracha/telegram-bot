@@ -10,10 +10,10 @@ req_action = None
 
 @app.route('/message', methods=["POST"])
 def handle_message():
-    # print(request.get_json())
-    # message = Message(request.get_json())
-    # res_message = get_action(message.action, message.params)
-    # res = requests.get(TELEGRAM_RES.format(TOKEN, message.chat_id, res_message))
+    print(request.get_json())
+    message = Message(request.get_json())
+    res_message = get_action(message.action, message.params)
+    res = requests.get(TELEGRAM_RES.format(TOKEN, message.chat_id, res_message))
     return Response("success")
 
 @app.route('/sendEmailsToUser/<chat_id>', methods=["GET"])
@@ -37,4 +37,4 @@ def check_new_mails(): #will calles every minute by cron job
 
 if __name__ == '__main__':
     requests.get(TELEGRAM_INIT_WEBHOOK_URL)
-    app.run(port=3000, threaded = True, debug=True)
+    app.run(port=3000)

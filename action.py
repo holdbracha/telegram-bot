@@ -16,8 +16,8 @@ def create_temp_mail(chat_id):
 
 
 def start_sending_proccess(chat_id):
-    #mail = Mail(chat_id, operation = 'send')
-    mail = Mail(chat_id)
+    mail = Mail(chat_id, operation = 'send')
+    #mail = Mail(chat_id)
     save_sending_mail(Sending(chat_id, mail, 'get_receiver'))
     return 'Who is the recipient?'
 
@@ -25,7 +25,7 @@ def start_sending_proccess(chat_id):
 def get_receiver(params):
     params[1].update_mail('receiver', params[2])
     save_sending_mail(Sending(params[0], params[1], 'get_subject'))
-    return 'What the subject?'
+    return 'What is the subject?'
 
 
 def get_subject(params):
@@ -34,20 +34,23 @@ def get_subject(params):
     return 'message?'
 
 def get_msg(params):
-    params[1].update_mail('message', params[2])
+    params[1].update_mail('msg', params[2])
     save_sending_mail(Sending(params[0], params[1], 'is_include_files'))
-    return 'want to add a file?'
+    return 'Do you want to add a file?'
 
 def is_include_files(params):
+    #print('mail--------------------------------:' + params[1].__dict__)
     if any(substring in params[2] for substring in ['no', 'not']):
         send_mail(params[1])
+        save_sent_mail(Sent(params[0], params[1], str(datetime.datetime.now())))
         return 'Your message sent successfully :)'
     #else
     save_sending_mail(Sending(params[0], params[1], 'get_file'))
     return 'please attach a file'
 
 def get_file(params):
-    params[1].update_mail('file', params[2])
+    #TODO - check how to update
+    params[1].update_mail('files', params[2])
     send_mail(params[1])
     save_sent_mail(Sent(params[0], params[1], str(datetime.datetime.now())))
     return 'Your message sent successfully :)'
@@ -57,7 +60,7 @@ def send_emails_to_user(chat_id):
     res_list_messages = []
     for recived_mail in emails:
         mail = recived_mail.mail
-        message = "You got a mail from: {}\nDate: {}\nSubject: {}\nMessage: {}".format(mail.sender, mail.date, mail.subject, mail.msg)
+        message = "You got a mail from: {}\nDate: {}\nSubject: {}\nMessage:\n{}".format(mail.sender, mail.date, mail.subject, mail.msg)
         res_list_messages.append(message)
         mark_readed_mail(mail._id)
     return res_list_messages
@@ -71,6 +74,7 @@ handlers = {
     "get_receiver": get_receiver,
     "get_subject": get_subject,
     "get_msg": get_msg,
+    "is_include_files": is_include_files,
     "get_file": get_file,
     "send_emails_to_user": send_emails_to_user,
     "non_action": non_action
