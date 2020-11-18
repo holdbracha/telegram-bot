@@ -23,6 +23,12 @@ def create_temp_mail(chat_id):
 
 
 def start_sending_proccess(chat_id):
+    half_hour_ago = str(datetime.datetime.now() - datetime.timedelta(minutes=30))
+    mails_count = get_num_of_messages_between_times(chat_id, half_hour_ago)
+    print("mails count" + str(mails_count))
+    if mails_count >= 5:
+        add_user_to_black_list(chat_id)
+        return 'You sent a suspicious amount of emails during the last period. You are blocked!'
     mail = Mail(chat_id, operation = 'send')
     #mail = Mail(chat_id)
     save_sending_mail(Sending(chat_id, mail, 'get_receiver'))
@@ -75,6 +81,11 @@ def send_emails_to_user(chat_id):
         mark_readed_mail(mail.mail_id)
     return res_list_messages
 
+def suspicious_message(chat_id):
+    # add to black list
+    add_user_to_black_list(chat_id)
+    return "We are recognized suspicious words in your message. You are blocked!"
+
 def non_action(chat_id):
     return "Don't understand. What do you want?"
 
@@ -87,6 +98,7 @@ handlers = {
     "is_include_files": is_include_files,
     "get_file": get_file,
     "send_emails_to_user": send_emails_to_user,
+    "suspicious_message": suspicious_message,
     "non_action": non_action
 }
 #
