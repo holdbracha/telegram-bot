@@ -30,7 +30,6 @@ def start_sending_proccess(chat_id):
         add_user_to_black_list(chat_id)
         return 'You sent a suspicious amount of emails during the last period. You are blocked!'
     mail = Mail(chat_id, operation = 'send')
-    #mail = Mail(chat_id)
     save_sending_mail(Sending(chat_id, mail, 'get_receiver'))
     return 'Who is the recipient?'
 
@@ -81,6 +80,27 @@ def send_emails_to_user(chat_id):
         mark_readed_mail(mail.mail_id)
     return res_list_messages
 
+def start_password_proccess(chat_id):
+    save_encrypted_key(EncryptedKey(chat_id, next_action = 'get_url'))
+    return 'Please write the URL of the website that you want a password for it'
+
+def get_url(params):
+    params[1].update_encrypted_key('_id', params[2])
+    params[1].update_encrypted_key('next_action', 'get_nickname')
+    save_encrypted_key(params[1])
+    return 'Give nick name for the website'
+
+def get_nickname(params):
+    params[1].update_encrypted_key('nickname', params[2])
+    params[1].update_encrypted_key('next_action', 'get_fixed_password_and_save')
+    save_encrypted_key(params[1])
+    return 'press your fixed password for that service'
+
+def get_fixed_password_and_save(params):
+    params[1].update_encrypted_key('next_action', 'get_fixed_password')
+    password = set_encrypted_key(params[1])
+    return "Your password save successfully :)"
+
 def suspicious_message(chat_id):
     # add to black list
     add_user_to_black_list(chat_id)
@@ -90,6 +110,7 @@ def non_action(chat_id):
     return "Don't understand. What do you want?"
 
 handlers = {
+    "suspicious_message": suspicious_message,
     "createTempMail": create_temp_mail,
     "start_sending_proccess": start_sending_proccess,
     "get_receiver": get_receiver,
@@ -98,19 +119,12 @@ handlers = {
     "is_include_files": is_include_files,
     "get_file": get_file,
     "send_emails_to_user": send_emails_to_user,
-    "suspicious_message": suspicious_message,
+    "start_password_proccess": start_password_proccess,
+    "get_url": get_url,
+    "get_nickname": get_nickname,
+    "get_fixed_password_and_save": get_fixed_password_and_save,
     "non_action": non_action
 }
-#
-# index = send_actions.index(action)
-#             if send_function_per_action[index] is not None:
-#                 send_function_per_action[index](mail)
-#             if (action == 'is_include_files' and ('no' in self.message or 'not' in self.message)) or index == len(send_actions) - 1:
-#                 sara.send_mail(mail)
-#             else:
-#                 brachi.save_sending_mail(self.chat_id, mail, send_actions[index + 1])
-#
-
 
 def get_action(action, params):
     if action not in handlers.keys():

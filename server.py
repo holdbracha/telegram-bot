@@ -43,20 +43,6 @@ def check_new_mails(): #will calles every minute by cron job
     return Response("success")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
     requests.get(TELEGRAM_INIT_WEBHOOK_URL)
     app.run(port=3000)
