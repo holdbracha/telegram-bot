@@ -21,7 +21,6 @@ def get_new_mail_addr(count = 1):
 
     try:
         res = requests.get(TEMP_MAIL_URL_GET_ADDRESSES.format(count))
-        print(res.json)
         return res.json()[0]
 
     except:
@@ -34,7 +33,6 @@ def get_mail_list_from_mail_addr(mail_addr):
     try:
         user, domain = tuple(mail_addr.split("@"))
         res = requests.get(TEMP_MAIL_URL_GET_MAILS_LIST.format(user, domain))
-        print(res)
         i=-1
         for i, mail_data in enumerate(res.json()):
             mail = Mail(mail_data["id"])

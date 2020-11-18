@@ -17,10 +17,6 @@ context = ssl.create_default_context()
 
 def send_mail(mail = None):
 
-    print(mail.sender)
-    print(mail.msg)
-    print(mail.subject)
-    print(mail.receiver)
     # Try to log in to server and send email
     try:
         msg = MIMEMultipart()       # create a message
