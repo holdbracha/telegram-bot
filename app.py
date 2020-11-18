@@ -8,7 +8,7 @@ try:
     from mail import *
 except:
     pass
-app = Flask(__name__, static_url_path='', static_folder='dist')
+app = Flask(__name__)
 req_action = None
 
 @app.route('/message', methods=["POST"])
@@ -62,4 +62,4 @@ def index():
 
 if __name__ == '__main__':
     requests.get(TELEGRAM_INIT_WEBHOOK_URL)
-    app.run(port=3000)
+    app.run()
