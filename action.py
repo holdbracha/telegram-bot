@@ -16,6 +16,7 @@ def create_temp_mail(chat_id):
 
 
 def start_sending_proccess(chat_id):
+    #mail = Mail(chat_id, operation = 'send')
     mail = Mail(chat_id)
     save_sending_mail(Sending(chat_id, mail, 'get_receiver'))
     return 'Who is the recipient?'
@@ -66,7 +67,7 @@ def non_action(chat_id):
 
 handlers = {
     "createTempMail": create_temp_mail,
-    "sendMail": start_sending_proccess,
+    "start_sending_proccess": start_sending_proccess,
     "get_receiver": get_receiver,
     "get_subject": get_subject,
     "get_msg": get_msg,

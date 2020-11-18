@@ -22,7 +22,8 @@ class Mail():
 
     def set_mail_data_from_json(self, json_data):
         if json_data["mail_id"] != self.mail_id:
-            raise MailException("msg id is diffrent from object mail", MailException.WRONG_MAIL_ID)
+            raise MailException("msg id is different from object mail", MailException.WRONG_MAIL_ID)
+
 
         self.sender = json_data.get("from", json_data.get("sender"))
         self.receiver = json_data.get("to", json_data.get("receiver"))

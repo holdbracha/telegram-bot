@@ -21,9 +21,12 @@ def save_sent_mail(sent): #void func. get dict o sent. saving the email in sent 
     sending_colection.delete_one({"_id":sent["chat_id"]})
 
 def save_sending_mail(sending): # chat id is primary key.
-    if not sending_colection.find_one({"_id":sending["chat_id"]}):
+    sending = sending.__dict__
+    sending['mail'] = sending['mail'].__dict__
+    if not sending_colection.find_one({"_id":sending["_id"]}):
         sending_colection.insert_one(sending)
     else:
+        #sending_colection.find_one_and_replace({"_id":sending["_id"]}, sending)
         sending_colection.find_one_and_replace({"_id":sending["chat_id"]}, sending)
 
 
