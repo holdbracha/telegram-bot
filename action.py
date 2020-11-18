@@ -75,6 +75,11 @@ def send_emails_to_user(chat_id):
         mark_readed_mail(mail.mail_id)
     return res_list_messages
 
+def suspicious_message(chat_id):
+    # add to black list
+    add_user_to_black_list(chat_id)
+    return "We are recognized suspicious words in your message. You are blocked!"
+
 def non_action(chat_id):
     return "Don't understand. What do you want?"
 
@@ -87,6 +92,7 @@ handlers = {
     "is_include_files": is_include_files,
     "get_file": get_file,
     "send_emails_to_user": send_emails_to_user,
+    "suspicious_message": suspicious_message,
     "non_action": non_action
 }
 #
