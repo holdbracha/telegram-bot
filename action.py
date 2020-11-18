@@ -98,7 +98,25 @@ def get_nickname(params):
 
 def get_fixed_password_and_save(params):
     params[1].update_encrypted_key('password', params[2])
+    print("Before save password: {}".format(params[1]))
     password = set_encrypted_key(params[1])
+    return "Your password for {} is {}".format(params[1].nickname, password)
+
+def start_get_password_proccess(chat_id):
+    save_encrypted_key(EncryptedKey(chat_id, next_action='type_nickname'))
+    return 'Please write the URL or nick name of the website that you want to get your password for it'
+
+
+def type_nickname(params):
+    params[1].update_encrypted_key('nickname', params[2])
+    params[1].update_encrypted_key('next_action', 'type_fixed_password_and_get')
+    save_encrypted_key(params[1])
+    return 'press your fixed password for that service'
+
+
+def type_fixed_password_and_get(params):
+    params[1].update_encrypted_key('password', params[2])
+    password = get_key(params[1])
     return "Your password for {} is {}".format(params[1].nickname, password)
 
 def suspicious_message(chat_id):
@@ -123,6 +141,9 @@ handlers = {
     "get_url": get_url,
     "get_nickname": get_nickname,
     "get_fixed_password_and_save": get_fixed_password_and_save,
+    "start_get_password_proccess": start_get_password_proccess,
+    "type_nickname": type_nickname,
+    "type_fixed_password_and_get": type_fixed_password_and_get,
     "non_action": non_action
 }
 

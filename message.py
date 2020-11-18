@@ -27,6 +27,9 @@ class Message:
         elif 'password' in self.message and 'new' in self.message:
             self.action = 'start_save_password_proccess'
             self.params = self.chat_id
+        elif 'password' in self.message and 'new' not in self.message:
+            self.action = 'start_get_password_proccess'
+            self.params = self.chat_id
         elif any(substring in self.message for substring in ['create', 'open', 'new']):
             self.action = 'createTempMail'
             self.params = self.chat_id

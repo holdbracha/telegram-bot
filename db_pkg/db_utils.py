@@ -152,17 +152,19 @@ def set_encrypted_key(encryptedKey):
 
 
 def get_key(EncryptedKey):
-    encrypted_key = encrypted_key_per_url_colection.find_one({"url":EncryptedKey.nickname, "chat_id":EncryptedKey.chat_id}).get("encrypted_key")
+    encrypted_key = encrypted_key_per_url_colection.find_one({"url":EncryptedKey.nickname, "chat_id":EncryptedKey.chat_id})
     if not encrypted_key:
         list_encrypted_key = encrypted_key_per_url_colection.find({"chat_id":EncryptedKey.chat_id})
         for e in list_encrypted_key:
             if EncryptedKey.nickname in e["nickname"]:
                 encrypted_key = e["encrypted_key"]
                 break
+    else:
+        encrypted_key = encrypted_key.get("encrypted_key")
     if not encrypted_key:
         return None
     password = EncryptedKey.get_key(encrypted_key)
-    user_password_colection.delete_one(EncryptedKey.__dict__)
+    user_password_colection.delete_one({"chat_id":encrypted_key.chat_id})
     return password
 
 def get_encrypted_key(chat_id): # return sending object by chat id. return None if there is no chat id in sending
