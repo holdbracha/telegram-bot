@@ -6,10 +6,6 @@ import datetime
 from db_pkg import *
 
 
-import sys
-sys.path.append('../')
-
-
 
 def get_new_mail_addr(count = 1):
 

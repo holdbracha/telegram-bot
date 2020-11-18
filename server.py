@@ -4,6 +4,8 @@ from config import *
 from message import *
 from action import get_action
 from mail import *
+from telegram.ext import Updater, CommandHandler
+
 
 app = Flask(__name__, static_url_path='', static_folder='dist')
 req_action = None
@@ -33,6 +35,20 @@ def check_new_mails(): #will calles every minute by cron job
             for message in res_messages:
                 requests.get(TELEGRAM_RES.format(TOKEN, chat_id, message))
     return Response("success")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
