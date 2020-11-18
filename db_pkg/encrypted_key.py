@@ -21,8 +21,9 @@ class EncryptedKey:
         return encrypted
 
 
-    def get_key(self, encrypted):
-        decrypted = Fernet.decrypt(encrypted)
+    def get_key_by_decrypted(self, encrypted, key):
+        fernet = Fernet(key)
+        decrypted = fernet.decrypt(encrypted)
         return decrypted.decode() # real password
 
 def get_EncryptedKey_from_dict(EncryptedKey_dict):

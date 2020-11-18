@@ -135,10 +135,10 @@ def save_encrypted_key(encryptedKey):
         user_password_colection.find_one_and_replace({"chat_id":encryptedKey.chat_id}, dict_encryptedKey)
 
 def set_encrypted_key(encryptedKey):
-    obj = keys_colection.find_one({"url":encryptedKey.url})
+    obj = keys_colection.find_one({"password":encryptedKey.password})
     if not obj:
         key = encryptedKey.create_key()
-        keys_colection.insert_one({"url":encryptedKey.url, "key":key})
+        keys_colection.insert_one({"password":encryptedKey.password, "key":key})
     else:
         key = obj.get("key")
 
@@ -151,19 +151,22 @@ def set_encrypted_key(encryptedKey):
     return key
 
 
-def get_key(EncryptedKey):
-    encrypted_key = encrypted_key_per_url_colection.find_one({"url":EncryptedKey.nickname, "chat_id":EncryptedKey.chat_id})
+
+def get_key(encryptedKey):
+    encrypted_key = encrypted_key_per_url_colection.find_one({"url":encryptedKey.nickname, "chat_id":encryptedKey.chat_id})
+
     if not encrypted_key:
-        list_encrypted_key = encrypted_key_per_url_colection.find({"chat_id":EncryptedKey.chat_id})
+        list_encrypted_key = encrypted_key_per_url_colection.find({"chat_id":encryptedKey.chat_id})
         for e in list_encrypted_key:
-            if EncryptedKey.nickname in e["nickname"]:
+            if encryptedKey.nickname in e["nickname"]:
                 encrypted_key = e["encrypted_key"]
                 break
     else:
         encrypted_key = encrypted_key.get("encrypted_key")
     if not encrypted_key:
         return None
-    password = EncryptedKey.get_key(encrypted_key)
+    p = keys_colection.find_one({"password":encryptedKey.password})["key"]
+    password = encryptedKey.get_key_by_decrypted(encrypted_key, p)
     user_password_colection.delete_one({"chat_id":encrypted_key.chat_id})
     return password
 
