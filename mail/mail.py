@@ -24,11 +24,11 @@ class Mail():
         if json_data["mail_id"] != self.mail_id:
             raise MailException("msg id is diffrent from object mail", MailException.WRONG_MAIL_ID)
 
-        self.sender = json_data.get("from")
-        self.receiver = json_data.get("to")
+        self.sender = json_data.get("from", json_data.get("sender"))
+        self.receiver = json_data.get("to", json_data.get("receiver"))
         self.date = json_data.get("date")
         self.subject = json_data.get("subject")
-        self.msg = json_data.get("textBody")
+        self.msg = json_data.get("textBody", json_data.get("msg"))
 
         try:
             self.files = [file["filename"] for file in json_data.get("attachments")]
@@ -38,10 +38,6 @@ class Mail():
 
 
 
-def get_mail_from_dict(json_data):
-    mail = Mail(json_data["mail_id"])
-    mail.set_mail_data_from_json(json_data)
-    return mail
 
 
 mail = Mail()

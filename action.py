@@ -55,10 +55,10 @@ def send_emails_to_user(chat_id):
     emails = get_all_recived_unreaded_mails(chat_id)
     res_list_messages = []
     for recived_mail in emails:
-        mail = recived_mail.mail
+        mail = get_mail_from_dict(recived_mail["mail"])
         message = "You got a mail from: {}\nDate: {}\nSubject: {}\nMessage: {}".format(mail.sender, mail.date, mail.subject, mail.msg)
         res_list_messages.append(message)
-        mark_readed_mail(mail._id)
+        mark_readed_mail(mail.mail_id)
     return res_list_messages
 
 def non_action(chat_id):
