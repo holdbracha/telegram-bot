@@ -33,7 +33,7 @@ def send_mail(mail = None):
         msg['Subject']=mail.subject
 
         # add in the message body
-        msg.attach(MIMEText(message, 'plain'))
+        msg.attach(MIMEText(message, 'html'))
         with smtplib.SMTP(smtp_server, port) as server:
             server.ehlo()  # Can be omitted
             server.starttls(context=context)

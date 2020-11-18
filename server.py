@@ -31,7 +31,7 @@ def check_new_mails(): #will calles every minute by cron job
         if num_of_new_mails > 0:
             res_messages = get_action('send_emails_to_user', chat_id)
             for message in res_messages:
-                    requests.get(TELEGRAM_RES.format(TOKEN, chat_id, message))
+                requests.get(TELEGRAM_RES.format(TOKEN, chat_id, message))
     return Response("success")
 
 

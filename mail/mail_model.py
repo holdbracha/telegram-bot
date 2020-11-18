@@ -30,15 +30,16 @@ def get_mail_list_from_mail_addr(mail_addr):
         res = requests.get(TEMP_MAIL_URL_GET_MAILS_LIST.format(user, domain))
         print(res)
         i=-1
-        for i, mail_data in enumerate(res):
+        for i, mail_data in enumerate(res.json()):
             mail = Mail(mail_data["id"])
+            mail.update_mail("receiver", mail_addr)
             get_mail_data(mail)
-
-        delete_mail_list_was_saved(mail_data)
+        #TODO
+        #delete_mail_list_was_saved(mail_data)
         chat_id = ""
-        if i > 0:
+        if i >= 0:
             chat_id = get_chat_id_by_mail_address(mail_addr)
-        return chat_id, i
+        return chat_id, i+1
 
     except:
         raise MailException(f"error at get mail list of {mail_addr}", MailException.ERROR_FORMATTING_URL)
@@ -48,13 +49,15 @@ def get_mail_list_from_mail_addr(mail_addr):
 def get_mail_data(mail):
 
     try:
-        user, domain = tuple(mail.sender.split("@"))
+        user, domain = tuple(mail.receiver.split("@"))
         res = requests.get(TEMP_MAIL_URL_GET_MAIL_DATA.format(user, domain, mail.mail_id))
-        res["mail_id"] = res["id"]
-        print(res)
-        mail.set_mail_data_from_json(res)
+        res_json = res.json()
+        res_json["mail_id"] = res_json["id"]
+        res_json["to"] = mail.receiver
+        print(res_json)
+        mail.set_mail_data_from_json(res_json)
         chat_id = get_chat_id_by_mail_address(mail.receiver)
-        received_ob = Received(chat_id, mail, mail.date, mail.mail_id)
+        received_ob = Recived(chat_id, mail, mail.date, mail.mail_id)
         save_recived_mail(received_ob)
         return mail
 
@@ -129,5 +132,9 @@ def get_mail_from_dict(json_data):
 
 
 
+def get_mail_from_dict(json_data):
+    mail = Mail(json_data["mail_id"])
+    mail.set_mail_data_from_json(json_data)
+    return mail
 
 
