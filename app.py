@@ -62,4 +62,4 @@ def index():
 
 if __name__ == '__main__':
     requests.get(TELEGRAM_INIT_WEBHOOK_URL)
-    app.run()
+    app.run(port=5000)
