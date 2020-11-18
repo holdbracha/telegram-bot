@@ -96,3 +96,32 @@ def get_curr_mail_address_by_chat_id(chat_id):
 def get_all_mail_address():
     docs = address_mail_colection.find()
     return list(docs)
+
+######Black List#######################################
+def get_num_of_messages_between_times(chat_id, from_tme):
+    pass
+
+def add_user_to_black_list(chat_id):
+    pass
+
+def get_black_list():
+    pass
+
+def is_in_black_list(chat_id):
+    pass
+
+########encrypted password################################
+def save_encrypted_key(EncryptedKey):
+    pass
+
+def set_encrypted_key(EncryptedKey):
+    pass
+    # delete from save
+    # create EncryptedKey
+
+def get_key(EncryptedKey):
+    # name in nickname url is None
+    # chat_id, nickname, password
+    # delete EncryptedKey
+    pass
+
