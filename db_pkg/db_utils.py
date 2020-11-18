@@ -2,7 +2,7 @@
 from config import MONGO_URL
 import pymongo
 from pymongo import MongoClient
-from encrypted_key import *
+from .encrypted_key import *
 
 from datetime import datetime #need to delete############################################################
 
@@ -140,7 +140,7 @@ def set_encrypted_key(encryptedKey):
         key = encryptedKey.create_key()
         keys_colection.insert_one({"_id":encryptedKey.password, "key":key})
 
-    encrypted_key = encrypted_key(key)
+    encrypted_key = encryptedKey.encrypted_key(key)
     try:
         encrypted_key_per_url_colection.insert_one({"_id":encryptedKey.url, "nickname":encryptedKey.nickname, "encrypted_key":encrypted_key, "chat_id":encryptedKey.chat_id})
     except pymongo.errors.DuplicateKeyError:

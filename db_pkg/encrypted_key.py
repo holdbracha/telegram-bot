@@ -1,4 +1,3 @@
-from cryptography.fernet import Fernet
 from cryptography.fernet import Fernet, InvalidToken
 
 class EncryptedKey:
@@ -22,7 +21,7 @@ class EncryptedKey:
 
 
     def get_key(self, encrypted):
-        decrypted = fernet.decrypt(encrypted)
+        decrypted = Fernet.decrypt(encrypted)
         return decrypted.decode() # real password
 
 def get_EncryptedKey_from_dict(EncryptedKey_dict):
