@@ -6,14 +6,26 @@ class EncryptedKey:
         self._chat_id = chat_id
         self._id = url
         self.nickname = nickname
-        key = Fernet.generate_key()
-        fernet = Fernet(key)
-        self.encrypted = fernet.encrypt(password.encode())
+        self.passwod = password
         self.next_action = next_action
 
-    def get_key(self, chat_id, nickname, password):
-        decrypted = fernet.decrypt(self.encrypted)
-        print("decrypted: ", decrypted.decode())
+    def create_key(self):
+        key = Fernet.generate_key()
+        return key
 
-def get_sent_from_dict(EncryptedKey):
-    pass
+  
+    
+    def encrypted_key(self, key):
+        fernet = Fernet(key)
+        encrypted = fernet.encrypt(self.password.encode())
+        return encrypted
+
+
+    def get_key(self, encrypted):
+        decrypted = fernet.decrypt(encrypted)
+        return decrypted.decode() # real password
+
+def get_EncryptedKey_from_dict(EncryptedKey_dict):
+    e = EncryptedKey(EncryptedKey_dict["chat_id"], EncryptedKey_dict["_id"], EncryptedKey_dict["nickname"], EncryptedKey_dict["passwod"], EncryptedKey_dict["next_action"])
+    return e
+
