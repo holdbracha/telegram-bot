@@ -75,3 +75,4 @@ Werkzeug==1.0.1
 gunicorn
 pymongo
 dnspython
+cryptography
