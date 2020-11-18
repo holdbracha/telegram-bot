@@ -26,17 +26,18 @@ def test_create_address():
 
 def test_get_new_mails():
     temp_chat_id = 1434038438
-    sender_addr = get_new_mail_addr()
-    add_mail_address(temp_chat_id, sender_addr)
-    receiver_mail = get_new_mail_addr()
-    add_mail_address(temp_chat_id, receiver_mail)
-
-    mail = Mail()
-    mail.update_mail("sender", sender_addr)
-    mail.update_mail("subject", "hello all")
-    mail.update_mail("msg", "this is the msg")
-    mail.update_mail("receiver", receiver_mail)
-    send_mail(mail)
+    # sender_addr = get_new_mail_addr()
+    # add_mail_address(temp_chat_id, sender_addr)
+    # receiver_mail = get_new_mail_addr()
+    # add_mail_address(temp_chat_id, receiver_mail)
+    #
+    # mail = Mail()
+    # mail.update_mail("sender", sender_addr)
+    # mail.update_mail("subject", "hello all")
+    # mail.update_mail("msg", "this is the msg")
+    # mail.update_mail("receiver", receiver_mail)
+    # send_mail(mail)
+    receiver_mail = "02zl36ogy7n@wwjmp.com"#"gd9kkvicamt@wwjmp.com"
 
     chat_id, num = get_mail_list_from_mail_addr(receiver_mail)
     if num > 0:
