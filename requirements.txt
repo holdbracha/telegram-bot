@@ -74,3 +74,4 @@ webencodings==0.5.1
 Werkzeug==1.0.1
 gunicorn
 pymongo
+dnspython
