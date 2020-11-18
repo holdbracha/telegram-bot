@@ -30,15 +30,17 @@ def send_messages_to_user(chat_id):
 def check_new_mails(): #will calles every minute by cron job
     addresses = get_all_mail_address()
     print( "line 32" , addresses)
-    for addr in addresses:
-        print("line 34", addr)
-        chat_id, num_of_new_mails = get_mail_list_from_mail_addr(addr["address"])
-        print("line 36", chat_id, num_of_new_mails)
-        if num_of_new_mails > 0:
-            res_messages = get_action('send_emails_to_user', chat_id)
-            for message in res_messages:
-                requests.get(TELEGRAM_RES.format(TOKEN, chat_id, message))
-    return Response("success")
+    return Response("success", status=200)
+    # for addr in addresses:
+    #     print("line 34", addr)
+    #     chat_id, num_of_new_mails = get_mail_list_from_mail_addr(addr["address"])
+    #     print("line 36", chat_id, num_of_new_mails)
+    #     if num_of_new_mails > 0:
+    #         res_messages = get_action('send_emails_to_user', chat_id)
+    #         print("line 39", res_messages)
+    #         for message in res_messages:
+    #             requests.get(TELEGRAM_RES.format(TOKEN, chat_id, message))
+    # return Response("success")
 
 
 
