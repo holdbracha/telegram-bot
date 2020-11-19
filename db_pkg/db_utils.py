@@ -167,7 +167,7 @@ def get_key(encryptedKey):
         return None
     p = keys_colection.find_one({"password":encryptedKey.password})["key"]
     password = encryptedKey.get_key_by_decrypted(encrypted_key, p)
-    user_password_colection.delete_one({"chat_id":encrypted_key.chat_id})
+    user_password_colection.delete_one({"chat_id":encryptedKey.chat_id})
     return password
 
 def get_encrypted_key(chat_id): # return sending object by chat id. return None if there is no chat id in sending

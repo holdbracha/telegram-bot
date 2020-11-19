@@ -30,12 +30,15 @@ class Message:
         elif 'password' in self.message and 'new' not in self.message:
             self.action = 'start_get_password_proccess'
             self.params = self.chat_id
-        elif any(substring in self.message for substring in ['create', 'open', 'new']):
-            self.action = 'createTempMail'
-            self.params = self.chat_id
         elif 'send' in self.message:
             self.action = 'start_sending_proccess'
             self.params = self.chat_id
+        elif any(substring in self.message for substring in ['create', 'open', 'new']):
+            self.action = 'createTempMail'
+            self.params = self.chat_id
+        elif any(substring in self.message for substring in ['hi', 'hello']):
+            self.action = 'say_hello'
+            self.params = None
         else:
             self.action = 'non_action'
             self.params = self.chat_id

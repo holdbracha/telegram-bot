@@ -92,6 +92,12 @@ def get_url(params):
 
 def get_nickname(params):
     params[1].update_encrypted_key('nickname', params[2])
+    params[1].update_encrypted_key('next_action', 'get_unique_password')
+    save_encrypted_key(params[1])
+    return 'press the password that you want to save'
+
+def get_unique_password(params):
+    params[1].update_encrypted_key('unique_password', params[2])
     params[1].update_encrypted_key('next_action', 'get_fixed_password_and_save')
     save_encrypted_key(params[1])
     return 'press your fixed password for that service'
@@ -100,7 +106,7 @@ def get_fixed_password_and_save(params):
     params[1].update_encrypted_key('password', params[2])
     print("Before save password: {}".format(params[1]))
     password = set_encrypted_key(params[1])
-    return "Your password for {} is {}".format(params[1].nickname, password)
+    return "Your password saved successfully :)"
 
 def start_get_password_proccess(chat_id):
     save_encrypted_key(EncryptedKey(chat_id, next_action='type_nickname'))
@@ -124,6 +130,9 @@ def suspicious_message(chat_id):
     add_user_to_black_list(chat_id)
     return "We are recognized suspicious words in your message. You are blocked!"
 
+def say_hello(params):
+    return "hi"
+
 def non_action(chat_id):
     return "Don't understand. What do you want?"
 
@@ -140,10 +149,12 @@ handlers = {
     "start_save_password_proccess": start_save_password_proccess,
     "get_url": get_url,
     "get_nickname": get_nickname,
+    "get_unique_password": get_unique_password,
     "get_fixed_password_and_save": get_fixed_password_and_save,
     "start_get_password_proccess": start_get_password_proccess,
     "type_nickname": type_nickname,
     "type_fixed_password_and_get": type_fixed_password_and_get,
+    "say_hello": say_hello,
     "non_action": non_action
 }
 
