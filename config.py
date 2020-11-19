@@ -11,3 +11,15 @@ MONGO_URL = "mongodb+srv://singulary:{}@user.itzww.mongodb.net/{}?retryWrites=tr
 USERNAME_MAIL = "AnonyMailBotTelegram@gmail.com"
 PASSWORD_MAIL = "or1sara2brachi3" #heroku with @ in end
 
+
+firebaseConfig = {
+"apiKey": "AIzaSyB3lmYn1aPAXaMR_7pOj4SMDQdOS_4Nx5c",
+"authDomain": "anonymailbot-d3247.firebaseapp.com",
+"databaseURL": "https://anonymailbot-d3247.firebaseio.com",
+"projectId": "anonymailbot-d3247",
+"storageBucket": "anonymailbot-d3247.appspot.com",
+"messagingSenderId": "77512838602",
+"appId": "1:77512838602:web:ac0fc9300307006e9b9333",
+"measurementId": "G-PHJX0J0KR6"
+}
+

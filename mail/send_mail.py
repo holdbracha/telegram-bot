@@ -52,17 +52,12 @@ def sendImage():
     r= requests.post(url, files=files, data=data)
     print(r.status_code, r.reason, r.content)
 
-def sendImageRemoteFile(img_url):
+def sendImageRemoteFile(img_url, chat_id):
     url = f"https://api.telegram.org/bot{TOKEN}/sendPhoto"
-    img_url = "https://m.breslev.co.il/filesupload/articles/articalimage/11921.jpg"
     remote_image = requests.get(img_url)
     photo = io.BytesIO(remote_image.content)
-    photo.name = '11921.jpg'
+    photo.name = 'img.jpg'
     files = {'photo': photo}
-    data = {'chat_id' : 1434038438}
-    r= requests.post(url, files=files, data=data)
-    data = {'chat_id' : 1390657756}
-    r= requests.post(url, files=files, data=data)
-    data = {'chat_id' : 817775026}
+    data = {'chat_id' : chat_id}
     r= requests.post(url, files=files, data=data)
     print(r.status_code, r.reason, r.content)

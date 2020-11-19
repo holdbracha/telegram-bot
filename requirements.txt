@@ -76,3 +76,5 @@ gunicorn
 pymongo
 dnspython
 cryptography
+telepot
+firebase
