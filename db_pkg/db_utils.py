@@ -129,40 +129,46 @@ def is_in_black_list(chat_id):
 ########encrypted password################################
 def save_encrypted_key(encryptedKey):
     dict_encryptedKey = encryptedKey.__dict__
-    try:
+    if not user_password_colection.find_one({"chat_id":encryptedKey.chat_id}):
         user_password_colection.insert_one(dict_encryptedKey)
-    except pymongo.errors.DuplicateKeyError:
-        pass
+    else:
+        user_password_colection.find_one_and_replace({"chat_id":encryptedKey.chat_id}, dict_encryptedKey)
 
 def set_encrypted_key(encryptedKey):
-    key = keys_colection.find_one({"_id":encryptedKey.password}).get("key")
-    if not key:
+    obj = keys_colection.find_one({"password":encryptedKey.password})
+    if not obj:
         key = encryptedKey.create_key()
-        keys_colection.insert_one({"_id":encryptedKey.password, "key":key})
+        keys_colection.insert_one({"password":encryptedKey.password, "key":key})
+    else:
+        key = obj.get("key")
 
     encrypted_key = encryptedKey.encrypted_key(key)
     try:
-        encrypted_key_per_url_colection.insert_one({"_id":encryptedKey.url, "nickname":encryptedKey.nickname, "encrypted_key":encrypted_key, "chat_id":encryptedKey.chat_id})
+        encrypted_key_per_url_colection.insert_one({"url":encryptedKey.url, "nickname":encryptedKey.nickname, "encrypted_key":encrypted_key, "chat_id":encryptedKey.chat_id})
     except pymongo.errors.DuplicateKeyError:
         pass
-    user_password_colection.delete_one(EncryptedKey._dict__)
+    user_password_colection.delete_one({"chat_id":encryptedKey.chat_id})
+    return key
 
 
-def get_key(EncryptedKey):
-    encrypted_key = encrypted_key_per_url_colection.find_one({"_id":EncryptedKey.nickname, "chat_id":EncryptedKey.chat_id}).get("encrypted_key")
+
+def get_key(encryptedKey):
+    encrypted_key = encrypted_key_per_url_colection.find_one({"url":encryptedKey.nickname, "chat_id":encryptedKey.chat_id})
+
     if not encrypted_key:
-        list_encrypted_key = encrypted_key_per_url_colection.find({"chat_id":EncryptedKey.chat_id})
+        list_encrypted_key = encrypted_key_per_url_colection.find({"chat_id":encryptedKey.chat_id})
         for e in list_encrypted_key:
-            if EncryptedKey.nickname in e["nickname"]:
+            if encryptedKey.nickname in e["nickname"]:
                 encrypted_key = e["encrypted_key"]
                 break
+    else:
+        encrypted_key = encrypted_key.get("encrypted_key")
     if not encrypted_key:
         return None
-    password = EncryptedKey.get_key(encrypted_key)
-    user_password_colection.delete_one(EncryptedKey._dict__)
+    p = keys_colection.find_one({"password":encryptedKey.password})["key"]
+    password = encryptedKey.get_key_by_decrypted(encrypted_key, p)
+    user_password_colection.delete_one({"chat_id":encrypted_key.chat_id})
     return password
 
 def get_encrypted_key(chat_id): # return sending object by chat id. return None if there is no chat id in sending
-    return encrypted_key_per_url_colection.find_one({"chat_id":chat_id})
- 
-
+    return user_password_colection.find_one({"chat_id":chat_id})

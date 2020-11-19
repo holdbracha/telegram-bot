@@ -44,26 +44,10 @@ def check_new_mails(): #will calles every minute by cron job
     return Response("success")
 
 
-@app.route('/')
-def index():
-    return "<h1>Welcome to our server !!</h1>"
-
-
-
-
-
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     import os
     requests.get(TELEGRAM_INIT_WEBHOOK_URL)
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
-     #--preload -b 0.0.0.0:5000
     #
